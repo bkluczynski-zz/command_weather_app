@@ -1,5 +1,21 @@
 const request = require('request');
 
+const getTemperature = (lat, lng, callback) => {
+  request({
+    url: `https://api.darksky.net/forecast/e8ffa8a65d4e06fa7cb561c3231d9beb/${lat},${lng}`,
+    json: true,
+  }, (error, response, body) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(undefined, {
+        weather: body.currently.temperature,
+      });
+    }
+  });
+};
+
+
 const getAddress = (address, callback) => {
   const encodedAddress = encodeURIComponent(address);
   request({
@@ -14,7 +30,7 @@ const getAddress = (address, callback) => {
       callback(undefined, {
         address: body.results[0].formatted_address,
         latitude: body.results[0].geometry.location.lat,
-        longitue: body.results[0].geometry.location.lng,
+        longitude: body.results[0].geometry.location.lng,
       });
     }
   });
@@ -22,4 +38,5 @@ const getAddress = (address, callback) => {
 
 module.exports = {
   getAddress,
+  getTemperature,
 };
