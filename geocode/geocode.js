@@ -5,12 +5,12 @@ const getTemperature = (lat, lng, callback) => {
     url: `https://api.darksky.net/forecast/e8ffa8a65d4e06fa7cb561c3231d9beb/${lat},${lng}`,
     json: true,
   }, (error, response, body) => {
-    if (error) {
-      callback(error);
-    } else {
+    if (!error && response.statusCode === 200) {
       callback(undefined, {
         weather: body.currently.temperature,
       });
+    } else {
+      callback('Something went wrong', error);
     }
   });
 };
